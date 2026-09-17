@@ -109,7 +109,7 @@ class UNetSegmentor(BaseSegmentor):
         self.threshold  = threshold
         self.model      = _build_model(model_name)
 
-    def fit(self, X_train, y_train, epochs=50, callbacks=None):
+    def fit(self, X_train, y_train, epochs=50, callbacks=None, save_path=None):
         """
         Train the model.
 
@@ -122,7 +122,8 @@ class UNetSegmentor(BaseSegmentor):
                                 If None, uses EarlyStopping + ModelCheckpoint
         """
         safe_name = self.model_name.replace("++", "pp").replace("+", "p")
-        save_path = f"{MODEL_ROOT}/best_{safe_name}.keras"
+        if save_path is None:
+            save_path = f"{MODEL_ROOT}/best_{safe_name}.keras"
 
         if callbacks is None:
             callbacks = [
@@ -135,7 +136,7 @@ class UNetSegmentor(BaseSegmentor):
                 # ),
                 tf.keras.callbacks.ModelCheckpoint(
                     save_path,
-                    monitor="val_dice_metic",
+                    monitor="val_dice_metric",
                     save_best_only=True,
                     mode="max",
                     verbose=1,

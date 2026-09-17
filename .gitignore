@@ -3,3 +3,5 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+examples/*
+!examples/end_to_end_API.ipynb

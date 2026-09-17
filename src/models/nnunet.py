@@ -207,6 +207,7 @@ class NNUNetSegmentor(BaseSegmentor):
             perform_everything_on_device=True,
             device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
             verbose=False,
+            allow_tqdm=False,
         )
         self._predictor.initialize_from_trained_model_folder(
             model_folder,

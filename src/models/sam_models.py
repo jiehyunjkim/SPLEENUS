@@ -17,7 +17,7 @@ Usage
 
     medsam = MedSAM3Segmentor().load()
     metrics = medsam.evaluate(X_test, y_test)                                 # text-only
-    metrics = medsam.evaluate_with_bbox(X_test, y_test, bbox_model=nn_model)  # text + box
+    metrics = medsam.evaluate_with_bbox(X_test, y_test, bbox_model=nn_model)  # text + bbox
 """
 import os
 from typing import Optional
@@ -78,6 +78,9 @@ def _run_predictor(predict_fn, X: np.ndarray, boxes: Optional[list], threshold: 
     for i in range(len(X)):
         box = boxes[i] if boxes is not None else None
         result = predict_fn(_to_pil_rgb(X[i]), TEXT_PROMPT, box=box, threshold=threshold)
+        #if result["masks"] is not None and result["scores"] is not None:
+        #    best_idx = int(np.argmax(result["scores"]))
+        #    out[i, ..., 0] = result["masks"][best_idx].astype(np.float32)
         if result["masks"] is not None:
             out[i, ..., 0] = result["masks"][0].astype(np.float32)
     return out
